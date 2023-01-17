@@ -19,7 +19,12 @@ namespace WebAppMySQLEF.Controllers
 
       public ActionResult Details(int id)
       {
-         return View();
+         var data = DataAccess.Client.Find(id);
+         if (data != null)
+         {
+            return View(data);
+         }
+         return RedirectToAction("Index");
       }
 
       public ActionResult Create()
@@ -32,7 +37,6 @@ namespace WebAppMySQLEF.Controllers
       {
          try
          {
-            // TODO: Add insert logic here
             DataAccess.Client.Add(client);
             DataAccess.SaveChanges();
             return RedirectToAction("Index");
@@ -46,17 +50,22 @@ namespace WebAppMySQLEF.Controllers
       // GET: Client/Edit/5
       public ActionResult Edit(int id)
       {
-         return View();
+         var data = DataAccess.Client.Find(id);
+         if (data != null)
+         {
+            return View(data);
+         }
+         return RedirectToAction("Index");
       }
 
       // POST: Client/Edit/5
       [HttpPost]
-      public ActionResult Edit(int id, FormCollection collection)
+      public ActionResult Edit(Client client)
       {
          try
          {
-            // TODO: Add update logic here
-
+            DataAccess.Entry(client).State = System.Data.Entity.EntityState.Modified;
+            DataAccess.SaveChanges();
             return RedirectToAction("Index");
          }
          catch
@@ -68,18 +77,28 @@ namespace WebAppMySQLEF.Controllers
       // GET: Client/Delete/5
       public ActionResult Delete(int id)
       {
-         return View();
+         var data = DataAccess.Client.Find(id);
+         if (data != null)
+         {
+            return View(data);
+         }
+         return RedirectToAction("Index");
       }
 
       // POST: Client/Delete/5
-      [HttpPost]
-      public ActionResult Delete(int id, FormCollection collection)
+      [HttpPost, ActionName("Delete")]
+      public ActionResult DeleteConfirmed(int id)
       {
          try
          {
-            // TODO: Add delete logic here
-
-            return RedirectToAction("Index");
+            var data = DataAccess.Client.Find(id);
+            if (data != null)
+            {
+               DataAccess.Client.Remove(data);
+               DataAccess.SaveChanges();
+               return RedirectToAction("Index");
+            }
+            return View();
          }
          catch
          {
