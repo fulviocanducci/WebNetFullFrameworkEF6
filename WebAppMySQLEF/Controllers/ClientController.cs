@@ -17,12 +17,15 @@ namespace WebAppMySQLEF.Controllers
          return View(DataAccess.Client.ToList());
       }
 
-      public ActionResult Details(int id)
+      public ActionResult Details(int? id)
       {
-         var data = DataAccess.Client.Find(id);
-         if (data != null)
+         if (id.HasValue)
          {
-            return View(data);
+            var data = DataAccess.Client.Find(id);
+            if (data != null)
+            {
+               return View(data);
+            }
          }
          return RedirectToAction("Index");
       }
